@@ -1,0 +1,40 @@
+// 應用的插件
+apply plugin: 'java' 	// Java 套件會被相依進來
+apply plugin: 'eclipse' // Eclipse 的 web 專案套件
+
+// 全域設定
+sourceCompatibility = 1.8   				// 設置 JDK 版本
+compileJava.options.encoding = 'UTF-8' 		// 原始碼編譯時的編碼
+compileTestJava.options.encoding = 'UTF-8'
+javadoc.options.encoding = 'UTF-8'
+version=1.0
+
+// 來源管理(函式庫來源)
+repositories {
+	mavenCentral()
+}
+
+// Data Source lib
+dependencies {
+	compile group: 'com.amazonaws', name: 'aws-lambda-java-core', version: '1.2.0'
+	compile group: 'org.springframework', name: 'spring-context', version: '4.3.10.RELEASE'
+	testCompile 'org.testng:testng:6.9.10'
+}
+
+task fatJar(type: Jar) {
+	manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',  
+        	'Implementation-Version': version,
+        	'Main-Class': 'com.test.eric.LambdaRequestHandler'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+jar.dependsOn(fatJar)
+
+// 執行testNG測試
+test {
+	useTestNG()
+}
