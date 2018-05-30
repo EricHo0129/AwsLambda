@@ -28,6 +28,7 @@ repositories {
 dependencies {
 	compile group: 'com.amazonaws', name: 'aws-lambda-java-core', version: '1.2.0'
 	compile group: 'org.springframework', name: 'spring-context', version: '4.3.10.RELEASE'
+	compile group: 'com.amazonaws', name: 'aws-java-sdk-dynamodb', version: '1.11.257'
 	testCompile 'org.testng:testng:6.9.10'
 }
 
@@ -48,21 +49,39 @@ jar.dependsOn(fatJar)
 
 shadowJar {
    
+   /*
    dependencies {
-        include (dependency('com.amazonaws:aws-lambda-java-core:1.2.0'))
+   		include (dependency('com.amazonaws:aws-lambda-java-core:1.2.0'))
+        include (dependency('com.amazonaws:aws-java-sdk-core:1.11.257'))
+        include (dependency('com.amazonaws:aws-java-sdk-dynamodb:1.11.257'))
+        include (dependency('com.amazonaws:aws-java-sdk-s3:1.11.257'))
+        include (dependency('com.amazonaws:aws-java-sdk-kms:1.11.257'))
         include (dependency('org.springframework:spring-context:4.3.10.RELEASE'))
         include (dependency('org.springframework:spring-aop:4.3.10.RELEASE'))
         include (dependency('org.springframework:spring-beans:4.3.10.RELEASE'))
         include (dependency('org.springframework:spring-core:4.3.10.RELEASE'))
         include (dependency('org.springframework:spring-expression:4.3.10.RELEASE'))
         include (dependency('commons-logging:commons-logging:1.2'))
+        include (dependency('com.fasterxml.jackson.core:jackson-core:2.6.7'))
+        include (dependency('com.fasterxml.jackson.core:jackson-databind:2.6.7.1'))
+        include (dependency('com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.6.7'))
+        include (dependency('com.fasterxml.jackson.core:jackson-annotations:2.6.0'))
+        include (dependency('org.apache.httpcomponents:httpclient:4.5.2'))
+        include (dependency('org.apache.httpcomponents:httpcore:4.4.4'))
+        include (dependency('joda-time:joda-time:2.8.1'))
    }
+    */
    manifest {
        attributes 'Main-Class': 'com.test.eric.LambdaRequestHandler'
    }
    relocate 'com.amazonaws', 'com.amazonaws'
    relocate 'org.springframework', 'org.springframework'
    relocate 'org.apache', 'org.apache'
+   relocate 'com.fasterxml.jackson', 'com.fasterxml.jackson'
+   relocate 'org.apache.http', 'org.apache.http'
+   relocate 'org.joda.time', 'org.joda.time'
+   relocate 'org.aopalliance', 'org.aopalliance'
+   relocate 'software.amazon', 'software.amazon'
 }
 
 build.dependsOn(shadowJar)
