@@ -1,6 +1,16 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+    }
+}
+
 // 應用的插件
 apply plugin: 'java' 	// Java 套件會被相依進來
 apply plugin: 'eclipse' // Eclipse 的 web 專案套件
+apply plugin: 'com.github.johnrengelman.plugin-shadow' //打包用
 
 // 全域設定
 sourceCompatibility = 1.8   				// 設置 JDK 版本
@@ -21,6 +31,7 @@ dependencies {
 	testCompile 'org.testng:testng:6.9.10'
 }
 
+/*
 task fatJar(type: Jar) {
 	manifest {
         attributes 'Implementation-Title': 'Gradle Jar File Example',  
@@ -33,6 +44,28 @@ task fatJar(type: Jar) {
 }
 
 jar.dependsOn(fatJar)
+*/
+
+shadowJar {
+   
+   dependencies {
+        include (dependency('com.amazonaws:aws-lambda-java-core:1.2.0'))
+        include (dependency('org.springframework:spring-context:4.3.10.RELEASE'))
+        include (dependency('org.springframework:spring-aop:4.3.10.RELEASE'))
+        include (dependency('org.springframework:spring-beans:4.3.10.RELEASE'))
+        include (dependency('org.springframework:spring-core:4.3.10.RELEASE'))
+        include (dependency('org.springframework:spring-expression:4.3.10.RELEASE'))
+        include (dependency('commons-logging:commons-logging:1.2'))
+   }
+   manifest {
+       attributes 'Main-Class': 'com.test.eric.LambdaRequestHandler'
+   }
+   relocate 'com.amazonaws', 'com.amazonaws'
+   relocate 'org.springframework', 'org.springframework'
+   relocate 'org.apache', 'org.apache'
+}
+
+build.dependsOn(shadowJar)
 
 // 執行testNG測試
 test {
