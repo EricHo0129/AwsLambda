@@ -74,6 +74,7 @@ shadowJar {
    manifest {
        attributes 'Main-Class': 'com.test.eric.LambdaRequestHandler'
    }
+   /*
    relocate 'com.amazonaws', 'com.amazonaws'
    relocate 'org.springframework', 'org.springframework'
    relocate 'org.apache', 'org.apache'
@@ -82,6 +83,10 @@ shadowJar {
    relocate 'org.joda.time', 'org.joda.time'
    relocate 'org.aopalliance', 'org.aopalliance'
    relocate 'software.amazon', 'software.amazon'
+   */
+   relocate 'com', 'com'
+   relocate 'org', 'org'
+   relocate 'software', 'software'
 }
 
 build.dependsOn(shadowJar)
